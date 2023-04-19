@@ -15,7 +15,16 @@
   <h3>Age:</h3>
   <p th:text="${person.getAge()}">VALUE<</p>
 
-  <h3><a th:href="@{/hello}">Return to main page</a></h3>
+<!--  <h4><a th:href="@{/users/{id}/edit(id=${user.getId()})}">Edit</a></h4>-->
+<!--  <form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}" \>-->
+<!--    <input type="submit" value="Delete">-->
+<!--  </form>-->
+
+  <h3><a th:href="@{/admin}">Return to main page</a></h3>
+
+  <form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Logout"/>
+  </form>
 </div>
 </body>
 </html>
