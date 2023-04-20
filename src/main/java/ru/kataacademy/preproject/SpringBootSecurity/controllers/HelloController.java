@@ -5,7 +5,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.kataacademy.preproject.SpringBootSecurity.security.PersonDetails;
+import ru.kataacademy.preproject.SpringBootSecurity.models.Person;
+//import ru.kataacademy.preproject.SpringBootSecurity.security.PersonDetails;
 
 @Controller
 public class HelloController {
@@ -19,8 +20,10 @@ public class HelloController {
     /** Получение объекта из сессии */
     public String showUser(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        model.addAttribute("person", personDetails.getPerson());
+//        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+//        model.addAttribute("person", personDetails.getPerson());
+        Person person = (Person) authentication.getPrincipal();
+        model.addAttribute("person", person);
         return "person/user";
     }
 }

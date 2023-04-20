@@ -1,17 +1,23 @@
 package ru.kataacademy.preproject.SpringBootSecurity.models;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="users")
-public class Person {
+public class Person implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
     @Column(name = "name")
-    private String username;
+    private String name;
     @Column(name = "email")
     private String email;
     @Column(name = "address")
@@ -30,13 +36,13 @@ public class Person {
             , joinColumns = @JoinColumn(name = "person_id")
             , inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public Person() {
     }
 
     public Person(String name, String email, String address, int age, String password) {
-        this.username = name;
+        this.name = name;
         this.email = email;
         this.address = address;
         this.age = age;
@@ -51,12 +57,12 @@ public class Person {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String username) {
+        this.name = username;
     }
 
     public String getEmail() {
@@ -82,7 +88,7 @@ public class Person {
     public void setAge(int age) {
         this.age = age;
     }
-
+    @Override
     public String getPassword() {
         return password;
     }
@@ -91,11 +97,11 @@ public class Person {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -103,12 +109,42 @@ public class Person {
     public String toString() {
         return "Person{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
+                ", username='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
                 ", age=" + age +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles().stream().map(p -> new SimpleGrantedAuthority(p.getRole())).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
