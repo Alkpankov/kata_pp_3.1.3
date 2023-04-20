@@ -14,20 +14,24 @@ import ru.kataacademy.preproject.SpringBootSecurity.services.PersonDetailsServic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PersonDetailsService personDetailsService;
+    private final SuccessUserHandler successUserHandler;
     @Autowired
-    public SecurityConfig(PersonDetailsService personDetailsService) {
+    public SecurityConfig(PersonDetailsService personDetailsService, SuccessUserHandler successUserHandler) {
         this.personDetailsService = personDetailsService;
+        this.successUserHandler = successUserHandler;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/hello", "/login","/error").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
                 .formLogin().loginPage("/login")
                 .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/hello", true)
+//                .defaultSuccessUrl("/user", true)
+                .successHandler(successUserHandler)
                 .failureUrl("/login?error")
                 .and()
                 .logout()

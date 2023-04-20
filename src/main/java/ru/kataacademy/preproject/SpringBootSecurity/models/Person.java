@@ -1,6 +1,7 @@
 package ru.kataacademy.preproject.SpringBootSecurity.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -22,19 +23,24 @@ public class Person {
     @Column(name="password")
     private String password;
 
-    @Column(name="role_id")
-    private int role_id;
+
+    @ManyToMany
+    @JoinTable(
+            name = "person_role"
+            , joinColumns = @JoinColumn(name = "person_id")
+            , inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
     public Person() {
     }
 
-    public Person(String name, String email, String address, int age, String password, int role_id) {
+    public Person(String name, String email, String address, int age, String password) {
         this.username = name;
         this.email = email;
         this.address = address;
         this.age = age;
         this.password = password;
-        this.role_id = role_id;
     }
 
     public long getId() {
@@ -85,12 +91,12 @@ public class Person {
         this.password = password;
     }
 
-    public int getRole_id() {
-        return role_id;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole_id(int role_id) {
-        this.role_id = role_id;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -102,7 +108,7 @@ public class Person {
                 ", address='" + address + '\'' +
                 ", age=" + age +
                 ", password='" + password + '\'' +
-                ", role_id=" + role_id +
+                ", roles=" + roles +
                 '}';
     }
 }

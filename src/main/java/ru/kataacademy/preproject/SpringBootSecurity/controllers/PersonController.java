@@ -59,7 +59,7 @@ public class PersonController {
         return "person/edit";
     }
 
-    @GetMapping("search")
+    @GetMapping("/search")
     public String searchByPersonId(@RequestParam("keyword") long id, Model model) {
         Person person = personService.get(id);
         if (person != null) {
