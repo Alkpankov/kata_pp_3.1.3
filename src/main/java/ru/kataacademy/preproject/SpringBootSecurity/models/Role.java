@@ -3,7 +3,7 @@ package ru.kataacademy.preproject.SpringBootSecurity.models;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -22,7 +22,7 @@ public class Role implements GrantedAuthority {
             , joinColumns = @JoinColumn(name = "role_id")
             , inverseJoinColumns = @JoinColumn(name = "person_id")
     )
-    private List<Person> persons;
+    private Set<Person> persons;
 
     public Role() {
     }
@@ -47,11 +47,11 @@ public class Role implements GrantedAuthority {
         this.role = role;
     }
 
-    public List<Person> getPersons() {
+    public Set<Person> getPersons() {
         return persons;
     }
 
-    public void setPersons(List<Person> persons) {
+    public void setPersons(Set<Person> persons) {
         this.persons = persons;
     }
 
