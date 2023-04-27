@@ -313,22 +313,22 @@
             <thead>
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">Age</th>
+              <th scope="col">Name</th>
               <th scope="col">Email</th>
+              <th scope="col">Address</th>
+              <th scope="col">Age</th>
               <th scope="col">Role</th>
             </tr>
             </thead>
             <tbody>
             <div th:object="${person}">
               <tr>
-                <td><span th:text="${person.getId()}">id</span></td>
-                <td><span th:text="${person.getName()}">first_name</span></td>
-                <td><span th:text="${person.getEmail()}">last_name</span></td>
-                <td><span th:text="${person.getAddress()}">age</span></td>
-                <td><span th:text="${person.getAge()}">email</span></td>
-                <td><span th:text="${person.toStringRoles()}">role</span></td>
+                <td th:utext="${person.getId()}">ID</td>
+                <td th:utext="${person.getName()}">Name</td>
+                <td th:utext="${person.getEmail()}">Email</td>
+                <td th:utext="${person.getAddress()}">Address</td>
+                <td th:utext="${person.getAge()}">Age</td>
+                <td th:utext="${person.toStringRoles()}">Roles</td>
               </tr>
             </div>
             </tbody>
