@@ -12,51 +12,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Service
-@Transactional(readOnly = true)
-public class PersonService {
 
-    private final PersonRepository personRepository;
-    private final RoleService roleService;
-    @Autowired
-    public PersonService(PersonRepository personRepository, RoleService roleService) {
-        this.personRepository = personRepository;
-        this.roleService = roleService;
-    }
-
-    public List<Person> listPerson() {
-        return personRepository.findAll();
-    }
-
-    @Transactional
-    public void add(Person person, List<Long> roles) {
-        personRepository.save(setRoleByListId(person, roles));
-    }
-
-    private Person setRoleByListId(Person person, List<Long> roleId){
-        Set<Role> role = new HashSet<>(roleService.findAllById(roleId));
-        if(role.isEmpty()) {
-            person.setRoles(roleService.findById(0L));
-        } else {
-            person.setRoles(role);
-        }
-        return person;
-    }
-
-    @Transactional
-    public void update(long id, Person updatedPerson, List<Long> roles) {
-        updatedPerson.setId(id);
-        personRepository.save(setRoleByListId(updatedPerson, roles));
-    }
-
-    @Transactional
-    public void delete(long id) {
-        personRepository.deleteById(id);
-    }
-
-    public Person get(long id) {
-        Optional<Person> person = personRepository.findById(id);
-        return person.orElse(null);
-    }
-
+public interface PersonService {
+    public List<Person> listPerson();
+    public void add(Person person, List<Long> roles);
+    public void update(long id, Person updatedPerson, List<Long> roles);
+    public void delete(long id);
+    public Person get(long id);
 }

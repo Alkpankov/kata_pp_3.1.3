@@ -50,7 +50,6 @@ public class PersonController {
     public String updatePerson(@ModelAttribute("edit_person") Person person,
                                @PathVariable("id") long id,
                                @RequestParam(name = "rol", required = false) List<Long> roles) {
-
         personService.update(id, person, roles);
         return "redirect:/admin";
     }
