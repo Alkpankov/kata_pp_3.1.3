@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,13 +31,16 @@ public class Person implements UserDetails {
     private String password;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name = "person_role"
             , joinColumns = @JoinColumn(name = "person_id")
             , inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public Person() {
     }
@@ -104,6 +108,9 @@ public class Person implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+    public void setRoles(Role role) {
+        roles.add(role);
+    }
 
     @Override
     public String toString() {
@@ -116,6 +123,12 @@ public class Person implements UserDetails {
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    public String toStringRoles() {
+        return getRoles().stream()
+                .map(p -> p.getRole().substring(5))
+                .collect(Collectors.joining(" "));
     }
 
     @Override
